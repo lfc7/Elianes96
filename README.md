@@ -8,3 +8,4 @@ Copy "websocketd" in "runWS.sh" & "WSpipe.sh" same folder.
 "WSpipe.sh" dependency: buffer ( sudo apt install buffer )
 
 run "runWS.sh" to start link between websocketd and serial "/dev/ttyACM0"
+then open elianes96.html in your browser
