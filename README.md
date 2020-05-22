@@ -1,5 +1,5 @@
-# html-DMX-lighting-desk-96-24-8
-html &amp; javascript lighting desk 96 circuits, 24 memories, 8 chasers
+# Elianes-96-24-8
+browser lighting desk with 96 circuits, 24 memories, 8 chasers
 
 A lighing desk for browser linked thru usbSerial to my teensy DMX dongle. 
 
