@@ -1,0 +1,1726 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=0.8">
+	<title>DMX 96/24 </title>
+	<link rel="stylesheet" href="./jquery/jquery-ui.css">
+	 <link rel="stylesheet" href="/resources/demos/style.css">
+	<style>
+		body { 
+			 background-color: #909090; 
+			 border-radius: 0px;
+		}
+	  
+		#autovolTable {
+			border: 1px solid black;
+			border-radius: 5px;
+			background-color: #999999;
+			float:left;
+		}
+		
+		
+		.table_handler {
+			table-layout:fixed;
+		}
+		
+		.table_handler > span {
+			height:240px;
+			float:left;
+			margin:30px;
+		}
+
+		#load {
+			margin-left: 50px;
+		}
+		
+		.linkBox {
+			padding:5px;
+			width:90px;
+			border: 1px solid black;
+			border-radius: 5px;
+			background-color: #DDDDDD;
+		}
+		
+		th {
+			font-size: 0.85em; !important;
+			
+		}
+		
+		a {
+			text-decoration: none;
+		}
+		
+		
+		.table_handler > tr > td {
+			width: 25px;
+			
+		}
+		
+		.classtitle {
+			display: inline;
+			
+		}
+		
+		.class_log {
+			font-size: 0.8em; !important;
+			margin: 2px;
+			padding: 0px;
+		}
+		
+		.circuit_dmx {
+			size: 0.8em
+			width: 50px;
+		}
+		
+		.class_val {
+			font-size: 0.8em;
+			//width: 50px;
+		}
+		
+		.class_val_chasers,
+		.class_val_mémoires {
+			width: 48px;
+		}
+		
+		.class_step {
+			font-size: 0.8em;
+			margin-left: 25px;
+			margin-bottom: 5px;
+			//width: 50px;
+		}
+		
+		.class_slider_NB{
+			width: 20px;
+			text-align: center;
+			font-size: 0.8em;
+			padding-top:10px;
+			/*background-color: pink;*/
+		}
+
+		.class_page_rot{
+			width: 20px;
+			height: 4px;
+			background-color: #144ceaa1;
+			position: absolute;
+			margin-top: 4px;
+		}
+		.class_page_fad{
+			width: 20px;
+			height: 4px;
+			text-align: center;
+			background-color: #b700ff80;
+			position: absolute;
+			margin-top: 8px;
+		}
+			
+			
+		.class_slider {
+			border: 1px solid black;
+			border-radius: 5px;
+			padding-top:5px;
+			/*padding-bottom:15px;*/
+			background-color: darkgray;
+			
+		}
+		
+		.class_td_slider {
+			border: 1px solid gray; 
+			border-radius: 2px;
+			margin: 1px;
+			margin-top: 5px;
+			text-align: center;
+			/*padding: 1px;*/
+			/*width: 10px; !important;*/
+		}
+		 
+		.class_td_circuits {
+			border: 1px solid gray; 
+			border-radius: 2px;
+			margin: 0px;
+			margin-top: 5px;
+			text-align: center;
+			/*padding: 1px;*/
+			width: 10px; !important;
+		}
+		
+		.class_td_speed,
+		.class_td_chasers,
+		.class_td_mémoires{
+			height: 250px;
+			width: 35px; !important;
+			padding: 1px; //add this
+			margin: 0px;
+			margin-top: 5px;
+			color: #000000;
+		}
+		
+		/*
+		.class_rec_handle{
+			background-color: #6a6a6a; //#c5c5c5; 
+		}
+		*/
+		
+		.class_rec_handle_circuits{
+			width: 22px; !important;
+			padding: 0px;
+			margin: 0px;
+		}
+		
+		.class_rec_handle_chasers,
+		.class_rec_handle_mémoires{
+			width: 40px; !important;
+			padding: 0px;
+			padding-top: 2px;
+			margin: 0px;
+			background-color: lightgray; 
+		}
+		
+		
+		.class_td_circuits .class_slidercircuits{
+			width: 7px; !important;
+			margin-top: 5px;
+		}
+		
+		.class_td_chasers .class_subslider{
+			width: 10px; !important;
+			height: 160px;
+			margin: 0px;
+			margin-left: 20px;
+			background-color: lightblue;
+		}
+		
+
+		
+		.class_td_chasers .class_sliderchasers,
+		.class_td_mémoires .class_slidermémoires{
+			width: 10px; !important;
+			height: 200px;
+			margin: 0px;
+			margin-top: 5px;
+		}
+		
+		.class_td_chasers .class_sliderchasers .ui-slider-handle,
+		.class_td_mémoires .class_slidermémoires .ui-slider-handle {
+			height: 10px;
+			width: 10px;
+			background: #6a6a6a;
+			padding-left: 5px; //add this
+		}
+		
+		
+		
+		.class_button_mem,
+		.class_mute_mem,
+		.class_rec_mem{
+			font-size: 0.6em;
+			margin: 2px;
+			margin-top: 5px;
+			padding: 0px;
+			width: 30px;
+			background-color: lightgray; 
+		}
+		
+
+		.class_clear_handle_chasers,
+		.class_clear_handle_mémoires,
+		.class_clear_handle_circuits{
+			display: block;
+			float: left;
+		}
+		
+		.class_hide,
+		#handle_live_mémoires{
+			display: block;
+			float: right;
+		}
+		
+		.class_button_clear_circuits{
+			font-size: 0.5em;
+			margin: 0px;
+			/*padding: 0px;*/
+			width: 40px;
+			background-color: lightgray; !important;
+			display: inline;
+		}
+		
+		.class_button_clear_chasers,
+		.class_button_clear_mémoires{
+			font-size: 0.5em;
+			margin: 0px;
+			padding: -1px;
+			width: 40px;
+			background-color: lightgray; 
+		}
+		
+		.class_nav{
+			/* font-size: 0.5em; */
+			margin-top: 7px;
+			margin-bottom: 0px;
+			margin-left: 18px;
+			padding-top: 2px;
+			padding-bottom: 2px;
+			padding-left: 4px;
+			padding-right: 4px;
+			background-color: lightgray;
+			display: inline-block;
+			min-width: 7px;
+			/*cursor: default;*/
+}
+		
+		.class_nav_moins{
+			margin-top: 0px;
+		}
+		
+		.class_clear_all{
+			font-size: 0.5em;
+
+			background-color: lightgray; 
+
+		}
+		
+		.class_ovr_cir{
+			font-size: 0.6em;
+			margin: 2px;
+			margin-top: 5px;
+			padding: 0px;
+			width: 30px;
+		}
+		
+		.class_mem_name{
+			font-size: 9px;//0.7em;
+			width: 40px;
+			margin: 0px;
+			border-radius: 0px;
+		}
+		
+		/*
+		.class_master {
+			height: 10px; !important;
+			width: 70px; !important;
+			padding: 1px;
+			color: #000000;
+			background-color: lightgray;
+		}
+		*/
+		
+		.master_title_mémoires1{
+			text-decoration: none;
+			font-size: 0.9em;
+			font-weight: normal;
+			margin-right: 7px;
+			display: block;
+			float: right;
+		}
+		
+		#handle_val_master_mémoires1{
+			width: 25px;
+			text-decoration: none;
+			text-align: left;
+			font-size: 0.9em;
+			font-weight: normal;
+			margin-right: 7px;
+			display: block;
+			float: right;
+		}
+		
+		#handle_master_mémoires1{
+			width: 190px;
+			height: 7px;
+			padding: 1px; //add this
+			margin-top: 5px;
+			color: #000000;
+			background-color: lightgray; 
+			margin-right: 7px;
+			display: block;
+			float: right;
+		}
+		
+		.class_vu{
+			display:block;
+			position:absolute;
+			bottom: 0px; 
+			width: 3px;
+			height: 0%;
+			margin-left: 10px;
+			color: blue;
+			background-color: blue;
+			border-radius: inherit;
+		}
+		
+		#handle_master_mémoires1 > .ui-slider-handle {
+			height: 15px;
+			width: 10px;
+			background: #6a6a6a;
+			padding-left: 0px; //add this
+		}
+		
+		.titreReg {
+			border: 1px solid lightgray;
+			border-radius: 5px;
+			background-color: #BBBBBB;
+		}
+		
+		/* modif  UI ************ */
+		.ui-widget {
+			font-family: Arial,Helvetica,sans-serif;
+			font-size: 0.8em;
+		}
+		.ui-widget .ui-widget {
+			font-size: 0.8em;
+		}
+		.ui-widget input,
+		.ui-widget select,
+		.ui-widget textarea,
+		.ui-widget button {
+			font-family: Arial,Helvetica,sans-serif;
+			font-size: 0.8em;
+		}
+		
+		.ui-widget-content {
+			border: 1px solid #dddddd;
+			background: #ff55ff;
+			color: #000000;
+		}
+		.ui-widget-content a {
+			color: #005500;
+		}
+		.ui-widget-header {
+			border: 1px solid #dddddd;
+			background: #6a6a6a;
+			color: #000022;
+			/*font-weight: bold;*/
+		}
+		.ui-widget-header a {
+			color: #000000;
+		}
+			
+		.ui-slider {
+			height: 180px;
+			width: 7px;
+			padding: 1px; //add this
+			margin-top: 5px;
+			//background: #6a6a6a;
+			color: #000000;
+			background-color: lightgray; 
+		}
+		
+		.ui-slider .ui-slider-handle {
+			height: 10px;
+			width: 10px;
+			background: #6a6a6a;
+			padding-left: 5px; //add this
+		}
+		
+		.confAtBoot {
+			background-color: #AA2255; !important;
+		}
+	</style>
+  
+	<script src="./jquery/external/jquery/jquery.js"></script>
+	<script src="./jquery/jquery-ui.js"></script>
+	<script>
+		
+				/* USEFUL **********************************************************************/
+					
+		///binary to hexa ***************************************
+		function parseBin2Hexa(reg)
+		{
+			var inBin="";
+			$( "input[id*=reg" + reg + "]" ) .each(function() {
+				inBin=inBin + $( this ).spinner( "value" );
+			});
+			
+			var len = inBin.length;
+
+			// determine how many bits in first nibble
+			var firstBits = len % 4;
+
+			// if firstBits > 0 generate padding to make even nibbles
+			// increase len by number of padding bits
+			var inPadded = "";
+			if(firstBits > 0)
+			{
+			   var padding = "";
+			   for(var i = 0; i < 4 - firstBits; i++)
+			   {
+				 padding = "0" + padding;
+				 len++;
+			   }
+			   inPadded = padding + inBin;
+			}
+			else
+			{
+			inPadded = inBin;
+			}
+
+			// Binary to hexadecimal lookup table in
+			// a multidimensional array
+			var hexDigits = [
+			["0000","0"],
+			["0001","1"],
+			["0010","2"],
+			["0011","3"],
+			["0100","4"],
+			["0101","5"],
+			["0110","6"],
+			["0111","7"],
+			["1000","8"],
+			["1001","9"],
+			["1010","A"],
+			["1011","B"],
+			["1100","C"],
+			["1101","D"],
+			["1110","E"],
+			["1111","F"]];
+
+			// grab the input bits nibble by nibble
+			// look up in array and fetch hexadecimal value
+			var nibble = "";
+			var outHex = "";
+			for(var start = 0; start <= len - 4; start += 4)
+			{
+			   nibble = inPadded.substring(start, start + 4);
+			   for(var j = 0; j < hexDigits.length; j++)
+			   {
+				  if(nibble == hexDigits[j][0])
+				  {
+					  outHex += hexDigits[j][1];
+				  }
+			   }
+			}
+
+			//alert(outHex);
+			
+			//$( "#reg" + reg + "hexa").spinner( "value", outHex );
+			$( "#hexa" + reg + "hexa").val(outHex);
+			
+		}
+		
+		// csv to array ***************
+		function CSVtoArray(text) {
+			let ret = [''], i = 0, p = '', s = true;
+			for (let l in text) {
+				l = text[l];
+				if ('"' === l) {
+					s = !s;
+					if ('"' === p) {
+						ret[i] += '"';
+						l = '-';
+					} else if ('' === p)
+						l = '-';
+				} else if (s && ',' === l)
+					l = ret[++i] = '';
+				else
+					ret[i] += l;
+				p = l;
+			}
+			return ret;
+		}
+		
+		// color fct ******************
+		function rainbow(numOfSteps, step) {
+		// This function generates vibrant, "evenly spaced" colours (i.e. no clustering). This is ideal for creating easily distinguishable vibrant markers in Google Maps and other apps.
+		// Adam Cole, 2011-Sept-14
+		// HSV to RBG adapted from: http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
+			var r, g, b;
+			var h = step / numOfSteps;
+			var i = ~~(h * 6);
+			var f = h * 6 - i;
+			var q = 1 - f;
+			switch(i % 6){
+				case 0: r = 1; g = f; b = 0; break;
+				case 1: r = q; g = 1; b = 0; break;
+				case 2: r = 0; g = 1; b = f; break;
+				case 3: r = 0; g = q; b = 1; break;
+				case 4: r = f; g = 0; b = 1; break;
+				case 5: r = 1; g = 0; b = q; break;
+			}
+			var c = "#" + ("00" + (~ ~(r * 255)).toString(16)).slice(-2) + ("00" + (~ ~(g * 255)).toString(16)).slice(-2) + ("00" + (~ ~(b * 255)).toString(16)).slice(-2);
+			return (c);
+		
+		}
+		
+		/* WEBSOCKET **************************************************/
+		
+		// setup websocket with callbacks *****************
+		var ws = new WebSocket('ws://localhost:8080/');
+		ws.onopen = function() {
+			$("#fieldAct").append().css('backgroundColor', 'lightblue');
+			$( "input[type='radio']" ).checkboxradio( "option", "disabled", false );
+			$( "#CONNECT" ).checkboxradio( "option", "disabled", true );
+			logRX('CONNECTED');
+			$( "#RX" ).click();
+			sendByWs("get_dmx");
+		};
+		
+		ws.onclose = function() {
+			$("#fieldAct").append().css('backgroundColor', 'lightgray');
+			$( "input[type='radio']" ).checkboxradio( "option", "disabled", true );
+			$( "#CONNECT" ).checkboxradio( "option", "disabled", false );
+			logRX('DISCONNECTED');
+		};
+		
+		ws.onmessage = function(event) {
+			//log('MESSAGE: ' + event.data);
+			//console.log(event.data);
+			logRX(event.data);
+		};
+		
+		/* GLOBALS VARIABLES & CONST *************************************/
+		
+		
+		$.fx.off = true;
+		    
+		var intervalId = null;
+		
+		var flag_nohex2bin = '0';
+		
+		var newHTML = " ";
+		var oldMem = new Array();
+		var oldChs = new Array();
+		const MAXCIR = 96;
+		const MAXMEM = 24;
+		var	actual_slider_value_memoires = new Array();
+		var	actual_slider_value_circuits = new Array();
+		var	actual_slider_value_chasers = new Array();
+		var	actual_dmx = new Array();
+		var circuit_ovr = new Array();
+		var mem_rec_latch = new Array();
+		var whell_butt = false;
+		var latch_update = false;
+		
+		/* ANONyMOUS FCT **************************************************/
+		
+		$( function() {
+			
+			$(document).on("mousedown", function (e1) {
+				if (e1.which === 2) {
+					whell_butt = true;
+				}
+			});
+			
+			$(document).on("mouseup", function (e1) {
+				if (e1.which === 2) {
+					whell_butt = false;
+				}
+			});
+			
+			
+			$( ".newfaders" ).each(function() {     
+			
+				var presets =  $(this).text();
+				var preset = CSVtoArray(presets);
+				const fadersName = preset[0]; // circuits ; mem; ...
+				const startNB = Number(preset[1]); // 1-48 ; 49- ...
+				const lastNB = Number(preset[2]);
+				const type = "" + preset[3]; //cir ; mem ;chs
+				$(this).empty();
+				
+				/*
+				//first line ; table & title
+				newHTML = '<table id="table_' + fadersName + startNB + '" class="table_handler ui-state-default ui-corner-all ui-helper-clearfix" style="border: 1px solid black;"> ' +
+				'<tr><th id="title' + fadersName + startNB + '" class="classtitle' + fadersName + startNB + '" colspan=5 ><B>' + fadersName + ' ' + startNB + '-' + lastNB+ '</th>' +
+				'<th id="clear_handle_' + fadersName + startNB + '" class="class_clear_handle_' + fadersName + '" colspan=2 > <input type="button" id="clear' + fadersName + startNB + '" class="class_button_clear_' + fadersName + '" value="clr" ></th>' +
+				'<th><div id="master_title_' + fadersName + startNB + '" class="master_title_' + fadersName + startNB + '"></div></th>' +
+				'<th colspan=4 ><div id="handle_master_' + fadersName + startNB +'" class="class_master class_master_' + fadersName + startNB + '"  ></div></th>' +
+				'<th><div id="handle_val_master_' + fadersName + startNB +'" class="class_val_master class_val_master_' + fadersName + startNB + '"></div></th>' +
+				//'<th></th>'+
+				'<th><div id="handle_live_' + fadersName + '" class="class_live' + fadersName + startNB + '">live</div></th>' +
+				'</tr><tr>';
+				*/
+				
+				
+				//first line ; table & title
+				newHTML = '<table id="table_' + fadersName + startNB + '" class="table_handler ui-state-default ui-corner-all ui-helper-clearfix" style="border: 1px solid black;"> ' +
+				'<tr><th colspan=' + (lastNB - startNB + 1) + ' ><div id="title' + fadersName + startNB + '" class="classtitle classtitle' + fadersName + startNB + '" ><B>' + fadersName + ' ' + startNB + '-' + lastNB+ '</div>' +
+				'<div id="clear_handle_' + fadersName + startNB + '" class="class_clear_handle_' + fadersName + '" > <input type="button" id="clear' + fadersName + startNB + '" class="class_button_clear_' + fadersName + '" value="clr" ></div>' +
+				'<div id="handle_hide_' + fadersName + startNB + '" class="class_hide class_hide' + fadersName + ' class_hide' + fadersName + startNB + '">X</div> ' +
+				'<div id="handle_live_' + fadersName + '" class="class_live' + fadersName + startNB + '" title="">live</div>' +
+				'<div id="handle_val_master_' + fadersName + startNB +'" class="class_val_master class_val_master_' + fadersName + startNB + '"></div>' +
+				'<div id="handle_master_' + fadersName + startNB +'" class="class_master class_master_' + fadersName + startNB + '"  ></div>' +
+				'<div id="master_title_' + fadersName + startNB + '" class="master_title_' + fadersName + startNB + '"></div>' +
+				'</th>' +
+				
+				//'<th></th>'+
+				'</tr><tr>';
+				
+				
+				
+				
+				//first <tr> dmx value
+				for (var i = startNB; i <= lastNB; i += 1)
+				{
+					newHTML = newHTML + '<td ><span><div id="rec_' + fadersName + i + '" class="class_rec_handle_' + fadersName  + ' "></div><div id="val_' + fadersName + i + '" class="class_val class_val_' + fadersName + ' ">0</div></span></td>';
+				}
+				
+				newHTML = newHTML + '</tr><tr>';
+				
+				for (var i = startNB; i <= lastNB; i += 1)
+				{
+					newHTML = newHTML + '<td id="td_' + fadersName + i + '" class="class_td_slider class_td_' + fadersName + ' class_td_' + fadersName + startNB +' " ><div id=handlenav_' + fadersName + i +'></div><div id="slider' + fadersName + i + '" class="class_slider class_slider' + fadersName + ' ui-slider ui-corner-all ui-slider-vertical ui-widget ui-widget-content class_slider_' + fadersName + '"></div></td>';
+				}
+				
+				newHTML = newHTML + '</tr></table>';
+				
+				
+				$( this ).html(newHTML);
+				
+				for (var i = startNB; i <= lastNB; i += 1)
+				{
+					const numi = i ;
+					$("#slider" + fadersName + i ).slider({
+							value:0,
+							min: 0,
+							max: 255,
+							//range: "min",
+							animate: false, //true,
+							orientation: "vertical",
+							stop: function( event, ui ) {
+								sendByWs( "" + type + "," + ( numi - 1 ) + "," +  ui.value );
+								
+								$( "#val_" + fadersName + numi ).html( ui.value.toString() );
+								
+								var colorslider = rainbow(2550, 1024 - (ui.value * 4) );
+								$("#slider" + fadersName + numi  ).append().css('backgroundColor', colorslider);
+								
+								//test
+								if( fadersName == "mémoires")
+								{
+									//sendByWs( "" + type + "," + ( numi - 1 ) + "," +  ui.value );
+									actual_slider_value_memoires[ numi ] = ui.value;
+									updateCircuitsByMem( actual_slider_value_memoires );
+								}
+								
+								if( fadersName == "circuits")
+								{
+									actual_slider_value_memoires[ numi ] = ui.value;
+									if( ui.value == 0 )
+									{
+										$("#td_circuits" + numi  ).append().css('backgroundColor', "#c5c5c5");
+										circuit_ovr[numi]=0;
+									}
+								}
+
+							},
+							
+							slide: function( event, ui ) {
+								
+								sendByWs( "" + type + "," + ( numi - 1 ) + "," +  ui.value );
+								
+								
+								$( "#val_" + fadersName + numi ).html( ui.value.toString() );
+								var colorslider = rainbow(2550, 1024 - (ui.value * 4) );
+								$("#slider" + fadersName + numi  ).append().css('backgroundColor', colorslider);
+								
+								if( fadersName == "mémoires")
+								{
+									//sendByWs( "" + type + "," + ( numi - 1 ) + "," +  ui.value );
+									
+									actual_slider_value_memoires[ numi ] = ui.value;
+									updateCircuitsByMem( actual_slider_value_memoires );
+								}
+								
+								if( fadersName == "circuits")
+								{
+									//sendByWs( "" + type + "," + ( numi - 1 ) + "," +  ui.value );
+									
+									actual_slider_value_memoires[ numi ] = ui.value;
+									if( ui.value == 0 )
+									{
+										$("#td_circuits" + numi  ).append().css('backgroundColor', "#c5c5c5");
+										circuit_ovr[numi]=0;
+									}
+								}
+
+								
+							},
+							
+							start: function( event, ui ) {
+								if( fadersName == "circuits" )
+								{
+									$("#td_circuits" + numi  ).append().css('backgroundColor', "lightblue");
+									//$( "#slidercircuits" + numi ).button( "option", "ovr", true );
+									circuit_ovr[numi]=1;
+								}
+								
+							},
+							
+							
+							change: function( event, ui ) {
+
+								//console.log("try fire stop()");
+								//sendByWs( "" + type + "," + ( numi - 1 ) + "," +  ui.value );
+							}
+							
+							
+					});
+					
+					/* MOUSE WHELL **********************************************************************/
+					$("#slider" + fadersName + i ).bind('mousewheel DOMMouseScroll', function (e) {
+						var delta = 0, element = $(this), value, result, oe;
+						oe = e.originalEvent; // for jQuery >=1.7
+						value = element.slider('value');
+
+						if (oe.wheelDelta) {
+							delta = -oe.wheelDelta / 120;
+						}
+						
+						if (oe.detail) {
+							delta = oe.detail / 3 ;// * 10;
+						}
+						
+						if( whell_butt )
+						{
+							value -= delta * 15 ;/// 8;
+						}else{
+							value -= delta;
+						}
+						
+						value=parseInt(value);
+						
+						if (value > 255) {
+							value = 255;
+						}
+						
+						if (value < 0) {
+							value = 0;
+						}
+						
+						oresult = element.slider('option', 'start').call(element, e, { value: value });
+						result = element.slider('option', 'slide').call(element, e, { value: value });
+						if (result !== false) {
+							element.slider('value', value);
+						}
+						oresult = element.slider('option', 'stop').call(element, e, { value: value });
+						
+						return false;
+					});
+					
+					/* VU DMX **********************************************************************/
+					
+					
+					$("#slider" + fadersName + i ).append('<div id="VU_' + fadersName + i +'" class="class_vu class_vu_' + fadersName + i +'"></div>');
+					
+					/* BUTTONS **********************************************************************/
+					
+					
+					var num = "<div class=\"class_slider_NB\"><B>" + i + "</B></div>";
+					var rot = "<div id=\"rot" + fadersName + i + "\" class=\"class_page_rot\"></div>";
+					var fad = "<div id=\"fad" + fadersName + i + "\" class=\"class_page_fad\"></div>";
+					var butt = '<input type="button" id="button' + fadersName + i + '" class="class_button_mem" value=">" >';
+					var mute = '<input type="button" id="mute' + fadersName + i + '" class="class_mute_mem" value="Z" >';
+					var record = '<input type="button" id="rec' + fadersName + i + '" class="class_rec_mem ui-button " value="Rec" >';
+					//var ovr	= '<input type="button" id="ovr' + fadersName + i + '" class="class_ovr_cir ui-button " value="ovr" >';
+					
+					
+					var name = '<input type="text" id="name_' + fadersName + i + '" class="class_mem_name" name="name" maxlength="8" size="5">';
+					//var valdmx = "<div id=\"circuitDMX" + i + "\">ooo</div>";
+					
+					/* INFO page up/dw from BCF20000 *************************************************/
+					
+					// Add the element inside #slider
+					$("#td_" + fadersName + i ).append(rot + fad + num).css('bottom', '0%');
+					$(".class_page_rot").hide();
+					$(".class_page_fad").hide();
+					
+					
+					/* INIT OVR flag **********************************************************************/
+					
+					if( fadersName == "circuits" )
+					{
+						circuit_ovr[i]=0;
+					}
+					
+					
+					/* APPEND GO, REC, MUTE, & input NAME to CHASERS***********************************************/
+					
+					var subfaders='<div id="subslider' + fadersName + i + '" class="class_subslider class_subslider' + fadersName + ' ui-slider ui-corner-all ui-slider-vertical ui-widget ui-widget-content class_slider_' + fadersName + '"></div>';
+					var chs_step='<div id="val_sub' + fadersName + i + '" class="class_step class_step_' + fadersName + ' ">0</div>'
+					var nav_plus='<span id="nav_plus' + fadersName + i + '" class="class_nav class_nav_plus class_nav_' + fadersName + ' ">+</span>'
+					var nav_moins='<span id="nav_moins' + fadersName + i + '" class="class_nav class_nav_moins class_nav_' + fadersName + ' ">-</span>'
+					
+					
+					/*  CHASERS SUB-SLIDERS**************************************************************/
+					if( fadersName == "chasers" )
+					{
+						//mem_rec_latch[ i ] = 0;
+
+						//$("#sliderchasers" + i ).append(nav_plus).css('bottom', '0%');
+						//$("#sliderchasers" + i ).append(nav_moins).css('bottom', '0%');
+						$("#handlenav_" + fadersName + i ).append(nav_plus).css('bottom', '0%');
+						$("#handlenav_" + fadersName + i ).append(nav_moins).css('bottom', '0%');
+						
+						$("#sliderchasers" + i ).append(chs_step).css('bottom', '0%');
+						$("#sliderchasers" + i ).append(subfaders).css('bottom', '0%');
+
+						
+						$("#nav_plus" + fadersName + i ).button();
+						$("#nav_plus" + fadersName + i ).mousedown( function( event ) {
+							event.preventDefault();
+							sendByWs( "cu," + ( numi - 1 ) );
+						});
+						$("#nav_moins" + fadersName + i ).button();
+						$("#nav_moins" + fadersName + i ).mousedown( function( event ) {
+							event.preventDefault();
+							sendByWs( "cd," + ( numi - 1 ) );
+						});
+						
+						
+						$("#subslider" + fadersName + i ).slider({
+							value:0,
+							min: 0,
+							max: 255,
+							//range: "min",
+							animate: false, //true,
+							orientation: "vertical",
+							stop: function( event, ui ) {
+								sendByWs( "cs," + ( numi - 1 ) + "," +  ui.value );
+							},
+							slide: function( event, ui ) {
+								sendByWs( "cs," + ( numi - 1 ) + "," +  ui.value );
+							},
+						});
+						
+						$("#td_chasers" + i ).append(butt).css('bottom', '0%');
+						
+						
+						$("#td_chasers" + i ).append(mute).css('bottom', '0%');
+						$("#td_chasers" + i ).append(name).css('bottom', '0%');
+						$("#rec_chasers" + i ).append(record).css('bottom', '0%');
+						
+						$( "#button" + fadersName + i ).button();
+						$( "#mute" + fadersName + i ).button();
+						$( "#rec_mémoires" + i ).button(
+							{
+								allDMX: "0"
+							});
+							
+					}
+					
+					
+					
+					if( fadersName == "speed" )
+					{
+						//mem_rec_latch[ i ] = 0;
+						//$("#td_chasers" + i ).append(butt).css('bottom', '0%');
+						//$("#td_chasers" + i ).append(mute).css('bottom', '0%');
+						$("#td_speed" + i ).append(name).css('bottom', '0%');
+						//$("#rec_chasers" + i ).append(record).css('bottom', '0%');
+						
+						//$( "#button" + fadersName + i ).button();
+						//$( "#mute" + fadersName + i ).button();
+						//$( "#rec_mémoires" + i ).button(
+						//	{
+						//		allDMX: "0"
+						//	});
+						//	
+					}
+					
+					
+					
+					/* APPEND GO, REC, MUTE, & input NAME to MEM****************************************************/
+					
+					if( fadersName == "mémoires" )
+					{
+					
+						mem_rec_latch[ i ] = 0;
+						$("#td_mémoires" + i ).append(butt).css('bottom', '0%');
+						$("#td_mémoires" + i ).append(mute).css('bottom', '0%');
+						$("#td_mémoires" + i ).append(name).css('bottom', '0%');
+						$("#rec_mémoires" + i ).append(record).css('bottom', '0%');
+						
+					}
+					
+					/* SET GO, REC, MUTE, & input NAME to MEM & CHASES****************************************************/
+					
+					if( fadersName == "mémoires" || fadersName == "chasers" )
+					{
+					
+						// go butt *************
+						$( "#button" + fadersName + i ).button();
+						
+						$(  "#button" + fadersName + i ).mousedown( function( event ) {
+							sendByWs( type + "," + ( numi - 1 ) + "," +  255 );
+							if( fadersName == "mémoires" )oldMem[numi]=$( "#slider" + fadersName + numi ).slider('value');
+							if( fadersName == "chasers" )oldChs[numi]=$( "#slider" + fadersName + numi ).slider('value');
+							$( "#slider" + fadersName + numi ).slider('value', 255);
+							$( "#val_" + fadersName + numi ).html( 255 );
+							if( fadersName == "mémoires" )actual_slider_value_memoires[ numi ] = 255;
+							if( fadersName == "chasers" )actual_slider_value_chasers[ numi ] = 255;
+							var colorslider = rainbow(2550, 1024 - (255 * 4) );
+							$("#slider" + fadersName + numi  ).append().css('backgroundColor', colorslider);
+							updateCircuitsByMem( actual_slider_value_memoires );
+						});
+						
+						$(  "#button" + fadersName + i ).keydown( function( event ) {
+							oldMem[numi]=$( "#slider" + fadersName + numi ).slider('value');
+							$( "#slider" + fadersName + numi ).slider('value', 255);
+							$( "#val_" + fadersName + numi ).html( 255 );
+							actual_slider_value_memoires[ numi ] = 255;
+							var colorslider = rainbow(2550, 1024 - (255 * 4) );
+							$("#slider" + fadersName + numi  ).append().css('backgroundColor', colorslider);
+						});
+						
+						$(  "#button" + fadersName + i ).mouseup( function( event ) {
+							
+							var newVal=0;
+							if( fadersName == "mémoires" )newVal=oldMem[numi];
+							if( fadersName == "chasers" )newVal=oldChs[numi];
+							sendByWs( type + "," + ( numi - 1 ) + "," +  newVal );
+							$( "#slider" + fadersName + numi ).slider('value', newVal);
+							$( "#val_" + fadersName + numi ).html( newVal );
+							if( fadersName == "mémoires" )actual_slider_value_memoires[ numi ] = newVal;
+							if( fadersName == "chasers" )actual_slider_value_chasers[ numi ] = newVal;
+							var colorslider = rainbow(2550, 1024 - ( newVal * 4 ) );
+							$("#slider" + fadersName + numi  ).append().css('backgroundColor', colorslider);
+							updateCircuitsByMem( actual_slider_value_memoires );
+						});
+						
+						$(  "#button" + fadersName + i ).keyup( function( event ) {
+							$( "#slider" + fadersName + numi ).slider('value', oldMem[numi]);
+							$( "#val_" + fadersName + numi ).html( oldMem[numi] );
+							actual_slider_value_memoires[ numi ] = oldMem[numi];
+							var colorslider = rainbow(2550, 1024 - (oldMem[numi] * 4) );
+							$("#slider" + fadersName + numi  ).append().css('backgroundColor', colorslider);
+						});
+						
+						// mute *************************
+						$( "#mute" + fadersName + i ).button();
+						
+						$(  "#mute" + fadersName + i ).mousedown( function( event ) {
+							sendByWs( type + "," + ( numi - 1 ) + "," +  0 );
+							if( fadersName == "mémoires" )oldMem[numi]=$( "#slider" + fadersName + numi ).slider('value');
+							if( fadersName == "chasers" )oldChs[numi]=$( "#slider" + fadersName + numi ).slider('value');
+							$( "#slider" + fadersName + numi ).slider('value', 0);
+							$( "#val_" + fadersName + numi ).html( 0 );
+							if( fadersName == "mémoires" )actual_slider_value_memoires[ numi ] = 0;
+							if( fadersName == "chasers" )actual_slider_value_chasers[ numi ] = 0;
+							var colorslider = rainbow(2550, 1024 );
+							$("#slider" + fadersName + numi  ).append().css('backgroundColor', colorslider);
+							updateCircuitsByMem( actual_slider_value_memoires );
+							
+						});
+						
+						$(  "#mute" + fadersName + i ).keydown( function( event ) {
+							oldMem[numi]=$( "#slider" + fadersName + numi ).slider('value');
+							$( "#slider" + fadersName + numi ).slider('value', 0);
+							$( "#val_" + fadersName + numi ).html( 0 );
+							if( fadersName == "mémoires" )actual_slider_value_memoires[ numi ] = 0;
+							if( fadersName == "chasers" )actual_slider_value_chasers[ numi ] = 0;
+							var colorslider = rainbow(2550, 1024 );
+							$("#slider" + fadersName + numi  ).append().css('backgroundColor', colorslider);
+						});
+						
+						// rec ***************************************
+						//if( fadersName == "mémoires" || fadersName == "chasers" )
+						//{
+						$( "#rec_" + fadersName + i ).button(
+							{
+								allDMX: "0"
+							});
+						
+						$( "#rec_" + fadersName + i ).mousedown( function( event ) {
+							
+							if( fadersName == "mémoires" )
+							{
+								if( mem_rec_latch[ numi ] == 0 )
+								{
+									
+									var getDMX = new Array('0');
+									$( ".class_slidercircuits" ).each(function() {
+										getDMX.push( $( this ).slider('value') )
+									});
+									$(  "#rec_mémoires" + numi ).button( "option", "allDMX", getDMX );
+									
+									sendByWs("rec_mem," + ( numi - 1 ) );
+									
+									mem_rec_latch[ numi ] = 1;
+									
+									$( "#rec_mémoires" + numi  ).append().css('backgroundColor', 'orange');
+									$("#td_mémoires" + numi  ).append().css('backgroundColor', "darkgray" );
+									
+									saveMEM( numi );
+								}
+							}
+							
+							if( fadersName == "chasers" )
+							{
+								var totDMX = 0;
+								$( ".class_slidercircuits" ).each(function() {
+									var dmxval = $( this ).slider('value');
+									if( dmxval >= 1 )
+									{
+										totDMX = 1;
+										//break;
+									}
+								});
+								
+								if( totDMX == 1 )
+								{
+									sendByWs("rec_chs," + ( numi - 1 ) );
+									console.log("rec_chs," + ( numi - 1 ));
+								}else{
+									sendByWs("del_chs," + ( numi - 1 ) );
+								}
+								
+								console.log("trigg chasers rec");
+							}
+							
+						});
+						
+						$( "#rec_" + fadersName + i ).keydown( function( event ) {
+							//$( "#rec_mémoires" + numi  ).append().css('backgroundColor', 'orange');
+							//$("#td_mémoires" + numi  ).append().css('backgroundColor', "darkgray" );
+							
+						});
+						
+						$( "#rec_" + fadersName + i ).mouseup( function( event ) {
+							if( fadersName == "mémoires" )$( "#rec_" + fadersName + numi  ).append().css('backgroundColor', 'orange');
+							if( fadersName == "chasers" )$( "#rec_" + fadersName + numi  ).append().css('backgroundColor', 'yellow');
+						});
+						
+						$( "#rec_" + fadersName + i ).dblclick( function( event ) {
+							if( fadersName == "mémoires" )
+							{
+								mem_rec_latch[ numi ] = 0;
+								$(  "#rec_" + fadersName + numi ).button( "option", "allDMX",  new Array('0') );
+								$("#td_" + fadersName + numi  ).append().css('backgroundColor', "#c5c5c5" );
+								$( "#rec_" + fadersName + numi  ).append().css('backgroundColor', 'lightgray');
+								updateCircuitsByMem( actual_slider_value_memoires );
+							}
+						});
+						
+						//}
+
+					}
+
+					$( "#slider" + fadersName + i  ).append().css('backgroundColor', "lightblue");
+				
+				} //end of for loop startNB TO lastNB (fader)
+				
+				//**** hide faders *************************************************************
+				$( "#handle_hide_" + fadersName + startNB ).button();
+				$( "#handle_hide_" + fadersName + startNB ).mousedown( function( event ) 
+				{
+					if( $( this ).is(":visible") )
+					{
+						$( this ).append().css('backgroundColor', "pink");
+						$(".class_td_" + fadersName + startNB ).hide();
+					}
+					
+				});
+				
+				$( "#handle_hide_" + fadersName + startNB ).dblclick( function( event ) 
+				{
+						$( this ).append().css('backgroundColor', "lightgray");
+						$(".class_td_" + fadersName + startNB ).show();
+				});
+				
+				
+				
+					
+
+					
+					
+					
+			}); // end of each newfaders tag
+			
+			/* MEM  **********************************************************************/
+					
+			// init ??
+			$( ".class_mute_mem" ).each(function() {  
+				
+				$( this ).keydown();
+				
+			});
+			
+			/* MASTER fader **********************************************************************/
+					
+			
+			$("#master_title_mémoires1").html("master:");
+			$("#handle_master_mémoires1" ).append('<div id="test"></div>');
+			
+			$("#handle_master_mémoires1" ).slider({
+				value:0,
+				min: 0,
+				max: 255,
+				//range: "min",
+				animate: true,
+				orientation: "horizontal",
+				stop: function( event, ui ) {
+					sendByWs( "M," +  ui.value );
+					$( "#handle_val_master_mémoires1" ).html( ui.value.toString() );
+					var colorslider = rainbow(2550, 1024 - (ui.value * 4) );
+					$("#handle_master_mémoires1" ).append().css('backgroundColor', colorslider);
+					
+
+				},
+				
+				slide: function( event, ui ) {
+					
+					sendByWs( "M," +  ui.value );
+					$( "#handle_val_master_mémoires1" ).html( ui.value.toString() );
+					var colorslider = rainbow(2550, 1024 - (ui.value * 4) );
+					$("#handle_master_mémoires1"  ).append().css('backgroundColor', colorslider);
+					
+					
+				},
+				
+				change: function( event, ui ) {
+					
+					sendByWs( "M," +  ui.value );
+					$( "#handle_val_master_mémoires1" ).html( ui.value.toString() );
+					var colorslider = rainbow(2550, 1024 - (ui.value * 4) );
+					$("#handle_master_mémoires1"  ).append().css('backgroundColor', colorslider);
+					$("#test" ).append().css('backgroundColor', "blue");
+					
+				},
+				
+				start: function( event, ui ) {
+				
+				}
+				
+							
+			});
+			
+			
+			/* CLEAR BUTTON **********************************************************************/
+					
+			
+			/* CLEAR CIRCUITS **********************************************************************/
+					
+			
+			//var clearCir = '<input type="button" id="clearAllCircuits" class="class_button_clearCircuits" value="X" >';
+			//$( "#clear_handle_mémoires1" ).append(clearCir).css('bottom', '0%');
+			$( "#clearcircuits1" ).button();
+			$(  "#clearcircuits1" ).mousedown( function( event ) {
+				//sendByWs( "clr_cir" );
+				for( var nbcir = 1 ; nbcir < 49 ; nbcir++ )
+				{
+					if( circuit_ovr[nbcir] == 1)
+					{
+						//circuit_ovr[nbcir]=0;
+						//$( "#slidercircuits" + nbcir ).slider('value', 0);
+						sendByWs( "c" + "," + ( nbcir - 1 ) + "," +  "0" );
+						//sendByWs( "c" + "," + ( nbcir - 1 ) + "," +  "0" );
+						
+						$( "#val_circuits" + nbcir ).html( '0' );
+						var colorslider = rainbow(2550, 1024 );
+						$slider=$("#slidercircuits" + nbcir  );
+						$slider.append().css('backgroundColor', colorslider);
+						$slider.slider('value', 0);
+						actual_slider_value_circuits[ nbcir ] = 0;
+						$("#td_circuits" + nbcir  ).append().css('backgroundColor', "#c5c5c5");
+						circuit_ovr[nbcir]=0;
+					}
+				}
+				
+				//$( "#clearcircuits49" ).mousedown();
+							
+			});
+			
+			$( "#clearcircuits49" ).button();
+			$(  "#clearcircuits49" ).mousedown( function( event ) {
+				//sendByWs( "clr_cir" );
+				
+				for( var nbcir = 49 ; nbcir < 97 ; nbcir++ )
+				{
+					if( circuit_ovr[nbcir] == 1)
+					{
+						sendByWs( "c" + "," + ( nbcir - 1 ) + "," +  "0" );
+						//sendByWs( "c" + "," + ( nbcir - 1 ) + "," +  "0" );
+						
+					//circuit_ovr[nbcir]=0;
+						$( "#slidercircuits" + nbcir ).slider('value', 0);
+					
+						$( "#val_circuits" + nbcir ).html( '0' );
+						var colorslider = rainbow(2550, 1024 );
+						$("#slidercircuits" + nbcir  ).append().css('backgroundColor', colorslider);
+						actual_slider_value_circuits[ nbcir ] = 0;
+						$("#td_circuits" + nbcir  ).append().css('backgroundColor', "#c5c5c5");
+						
+						circuit_ovr[nbcir]=0;
+					}
+					
+								//}
+				}
+				//$( "#clearcircuits1" ).mousedown();
+			});
+			
+			/* CLEAR ALL **********************************************************************/
+					
+			
+			var clrAllCir = '<input type="button" id="clrAllCir" class="class_clear_all" value="clr all" >';
+			$(  "#clear_handle_mémoires1" ).append(clrAllCir);//.css('backgroundColor', "pink");
+			$( "#clrAllCir" ).button();
+			$(  "#clrAllCir" ).mousedown( function( event ) {
+				
+				sendByWs( "clr_mem" );
+				sendByWs( "clr_cir" );
+				sendByWs( "clr_chs" );
+				$( "#clearcircuits1" ).mousedown();
+				$( "#clearcircuits49" ).mousedown();
+				$( "#clearmémoires1" ).mousedown();
+				$( "#clearchasers1" ).mousedown();
+
+			});
+			
+			/* CLEAR MEM **********************************************************************/
+					
+			
+			$( "#clearmémoires1" ).button();
+			
+			$(  "#clearmémoires1" ).mousedown( function( event ) {
+				sendByWs( "clr_mem" );
+				for( var nbcir = 1 ; nbcir < 25 ; nbcir++ )
+				{
+					//sendByWs( "mem" + "," + ( nbcir - 1 ) + "," +  "0" );
+						
+					//circuit_ovr[nbcir]=0;
+					$( "#slidermémoires" + nbcir ).slider('value', 0);
+					
+					$( "#val_mémoires" + nbcir ).html( '0' );
+					var colorslider = rainbow(2550, 1024 );
+					$("#slidermémoires" + nbcir  ).append().css('backgroundColor', colorslider);
+					actual_slider_value_memoires[ nbcir ] = 0;
+					//$("#td_mémoires" + nbcir  ).append().css('backgroundColor', "#c5c5c5");
+				}
+				
+				updateCircuitsByMem( actual_slider_value_memoires );
+
+			});
+			
+			/* CLEAR CHASE **********************************************************************/
+					
+			
+			$( "#clearchasers1" ).button();
+			
+			$(  "#clearchasers1" ).mousedown( function( event ) {
+				sendByWs( "clr_chs" );
+				for( var nbcir = 1 ; nbcir < 9 ; nbcir++ )
+				{
+					//sendByWs( "mem" + "," + ( nbcir - 1 ) + "," +  "0" );
+						
+					//circuit_ovr[nbcir]=0;
+					$( "#sliderchasers" + nbcir ).slider('value', 0);
+					
+					$( "#val_chasers" + nbcir ).html( '0' );
+					var colorslider = rainbow(2550, 1024 );
+					$("#sliderchasers" + nbcir  ).append().css('backgroundColor', colorslider);
+					actual_slider_value_chasers[ nbcir ] = 0;
+					//$("#td_mémoires" + nbcir  ).append().css('backgroundColor', "#c5c5c5");
+				}
+				
+				updateCircuitsByMem( actual_slider_value_memoires );
+
+			});
+			
+			$(  ".class_livecircuits1" ).empty();
+			$(  ".class_livecircuits49" ).empty();
+			$(  ".class_livechasers1" ).empty();
+			
+			
+			/* LIVE BUTTON **********************************************************************/
+			
+			$( "#handle_live_mémoires" ).button();
+			
+			$( "#handle_live_mémoires" ).mousedown( function( event ) 
+			{
+				if( $( this ).is(":visible") )
+				{
+					$( this ).append().css('backgroundColor', "yellow");
+					$( ".class_rec_handle_mémoires" ).hide();
+					$( ".class_rec_handle_chasers" ).hide();
+					$( ".class_mem_name" ).prop('readonly', true);
+				}
+				
+			});
+			
+			$( "#handle_live_mémoires" ).dblclick( function( event ) 
+			{
+				//if( ! $( this ).is(":visible") )
+				//{
+					$( this ).append().css('backgroundColor', "lightgray");
+					$( ".class_rec_handle_mémoires" ).show();
+					$( ".class_rec_handle_chasers" ).show();
+					$( ".class_mem_name" ).prop('readonly', false);
+				//}
+				
+				//console.log($( ".class_rec_handle_mémoires" ).is(":visible"));
+			});
+			
+			
+			
+			/* OLD CONNECT **********************************************************************/
+					
+			// buttons*****************************************************
+			
+			//init all buttons
+			$( "input[type='radio']" ).checkboxradio({
+				disabled: true,
+				icon: false,
+			});
+			
+			//param buttons
+			$( "#CONNECT" ).checkboxradio( "option", "disabled", false );
+			$( "#CONNECT" ).on("click", function() {
+				location.reload(true);
+			});
+		  
+			$( "#TX" ).checkboxradio( "option", "disabled", true );
+			$("#TX").attr('checked', false);
+			
+			$( "#TX" ).on("click", function() {
+				$("#fieldAct").append().css('backgroundColor', 'red');
+				$("#RX").attr('checked', false); 
+				//flag_nohex2bin = '0';
+				//clearInterval(intervalId);
+				//var xu=sendByWs("cmd_set_controlSGTL");
+				
+			});
+			
+			$( "#RX" ).checkboxradio( "option", "disabled", true );
+			//$("#RX").attr('checked', true);
+			$( "#RX" ).on("click", function() {
+				$("#fieldAct").append().css('backgroundColor', 'green');
+				$("#TX").attr('checked', false);
+				//flag_nohex2bin = '1';
+				//var xu=sendByWs("cmd_unset_controlSGTL");
+				//intervalId = setInterval( function() { sendByWs("cmd_get_SGTLregisters"); }, 2000);
+			});
+			
+
+			 
+			
+		});
+		
+		//END OF ANONyMOUS FCT ***************************************************************
+		
+		/* UPDATE CIRCUITS FADERS POSITIONS ***************************************************/
+					
+		function updateCircuitsByMem( actualmemval )
+		{
+			if( latch_update )return;
+			latch_update = true;
+			var bestCirVal = new Array("0");
+			var memValue = 0;
+			var recalldmx = new Array("0");
+			var colorslider = rainbow(2550, 1024);
+			var bestVal=0;
+			for( var numMem = 1 ; numMem <= MAXMEM ; numMem++ )
+			{	
+				recalldmx = $(  "#rec_mémoires" + numMem ).button( "option", "allDMX" );
+				memValue = actualmemval[ numMem ];
+				
+				for( var numcir = 1 ; numcir <= MAXCIR ; numcir++ )
+				{
+									
+					
+					var newVal = ( memValue / 255 ) * parseInt( recalldmx[numcir] );
+
+					if( ! bestCirVal[ numcir ] )
+					{
+						bestCirVal[ numcir ] = 0;
+					}
+						
+					/*
+					if( actual_val > bestCirVal[ numcir ] )
+					{
+						bestCirVal[ numcir ] = actual_val;
+					}
+					*/
+						
+					bestVal = parseInt( bestCirVal[ numcir ] );
+					if( bestVal < Math.ceil( newVal ) )
+					{
+						bestCirVal[numcir] = Math.ceil( newVal );
+					}
+
+				}
+
+			}
+
+			for( var numCir = 1 ; numCir <= MAXCIR ; numCir++ )
+			{
+				if( circuit_ovr[numCir] == 0 )
+				{
+					
+					$slider = $("#slidercircuits" + numCir );
+					$slider.slider( 'value' , bestCirVal[ numCir ] );
+
+					$( "#val_circuits" + numCir ).html( bestCirVal[ numCir ].toString() );
+					
+					colorslider = rainbow(2550, 1024 - ( bestCirVal[ numCir ] * 4) );
+					$slider.append().css('backgroundColor', colorslider);
+					
+					/*
+					$slider = $("#slidercircuits" + numCir );
+					$slider.slider( 'value' , bestCirVal[ numCir ] );
+					$slider.slider('option', 'stop').call($slider, null, { value: bestCirVal[ numCir ] });
+					*/
+				}
+			}
+			//console.log(bestCirVal);
+			latch_update = false;
+
+		}
+
+
+
+		/* COOKIES **********************************************************************/
+					
+		//cookie
+		function saveMEM( nummem )
+		{
+			var memarray = $(  "#rec_mémoires" + nummem ).button( "option", "allDMX" );
+			console.log( memarray );
+			var memstrg = memarray.toString();
+			localStorage.setItem( "mem" + nummem, memstrg);
+			//setCookie( "mem" + nummem , memstrg, 30 );
+		}
+		
+		function loadMEM()
+		{
+			for( var numMem = 1 ; numMem <= MAXMEM ; numMem++ )
+			{
+				var raw=localStorage.getItem( "mem" + numMem );
+				getDMX = CSVtoArray( raw );
+				//getDMX = CSVtoArray( getCookie( "mem" + numMem ) );
+				
+				var w = 0;
+				for (var i=0; i<getDMX.length; i++) {
+				   w = w + getDMX[i];
+				}
+				if( w > 1 )
+				{
+					$(  "#rec_mémoires" + numMem ).button( "option", "allDMX", getDMX );
+					mem_rec_latch[ numMem ] = 1;
+					$( "#rec_mémoires" + numMem  ).append().css('backgroundColor', 'orange');
+					$("#td_mémoires" + numMem  ).append().css('backgroundColor', "darkgray" );
+					
+				}
+			}
+		}
+		
+		function setCookie(cname, cvalue, exdays) {
+			var d = new Date();
+			d.setTime(d.getTime() + (exdays*24*60*60*1000));
+			var expires = "expires="+ d.toUTCString();
+			document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/home/o/MEGAdrive/Elianes/elianes48";
+		}
+	  
+		function getCookie(cname) {
+			var name = cname + "=";
+			var ca = document.cookie.split(';');
+			for(var i = 0; i < ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ') {
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+					return c.substring(name.length, c.length);
+				}
+			}
+			return "";
+		}
+		
+		/* SEND ON WEBSOCKET **********************************************************************/
+					
+		function sendByWs(TXstring)
+		{
+			//ws.send( TXstring );
+			if (ws) {
+				try {
+					
+					ws.send( TXstring );
+					console.log("buffer: " + ws.bufferedAmount);
+					document.getElementById('Txlog').textContent ="Send: " + TXstring;
+					console.log(TXstring);
+				} catch (ex) {
+					console.log("alert('Cannot send: '" + ex );
+				}
+			}
+			
+		}
+		
+		
+		/* READ FROM WEBSOCKET********************************************************/
+					
+		function logRX(msg) { 
+			//console.log(msg);
+			var msg_array = msg.split( ',',97);
+			if( msg_array[0]  == 'a' )
+			{
+				for(var i = 1; i <= 97; i++) {
+					var val=parseInt( msg_array[i] );
+					var percent = 0;
+					if( val > 0)
+					{
+						percent=  Math.round( ( val / 255 ) * 100 );
+					}
+					$vu=$( "#VU_circuits" + i );
+					$vu.append().css( 'height', percent + '%' );
+					var colorslider = rainbow(2550, 1024 - (val * 4) );
+					$vu.append().css('backgroundColor', colorslider);
+				}
+			}else if( msg_array[0]  == 's' )
+			{
+				for(var i = 1; i <= 9; i++) 
+				{
+					var val=parseInt( msg_array[i] );
+					$( "#val_subchasers" + i ).html(val);
+				}
+			}else{
+				
+				//console.log(msg);
+				
+				var parsedMsg = CSVtoArray(msg);
+				document.getElementById('Rxlog').textContent ="Recv: " + msg;
+				
+				switch(parsedMsg[0]) {
+					
+					case "d":
+						//if( parseInt(parsedMsg[1]) > 96 )break;
+						var val=parseInt( parsedMsg[2] );
+						var percent = 0;
+						if( val > 0)
+						{
+							percent=  Math.round( ( val / 255 ) * 100 );
+						}
+						$vu=$( "#VU_circuits" + parsedMsg[1] );
+						$vu.append().css( 'height', percent + '%' );
+						var colorslider = rainbow(2550, 1024 - (val * 4) );
+						$vu.append().css('backgroundColor', colorslider);
+					break;
+
+					case "mem":
+						var val=parseInt(parsedMsg[2]);
+						$("#slidermémoires" + parseInt(parsedMsg[1]) ).slider("value", val);
+						$slider = $("#slidermémoires" + parseInt(parsedMsg[1]) );
+						$slider.slider('option', 'stop').call($slider, event, { value: val });
+					break;
+					
+					case "cir":
+						var val=parseInt(parsedMsg[2]);
+						/*
+						var percent= ( val / 255 ) * 100;
+						$( "#VU_mémoires" + parseInt(parsedMsg[1]) ).append().css( 'height', percent + '%' );
+						var colorslider = rainbow(2550, 1024 - (val * 4) );
+						$( "#VU_mémoires" + parseInt(parsedMsg[1]) ).append().css('backgroundColor', colorslider);
+						*/
+						$("#slidercircuits" + parseInt(parsedMsg[1]) ).slider("value", val);
+						$slider = $("#slidercircuits" + parseInt(parsedMsg[1]) );
+						$slider.slider('option', 'stop').call($slider, event, { value: val });
+					break;
+					
+					case "rotpage":
+						var type="circuits";
+						var page=( parseInt(parsedMsg[2]) * 8 ) - 8 + 1;
+						if( parsedMsg[1] == "mem")
+						{
+							type="mémoires";
+						}
+						$(".class_page_rot").hide();
+						for(var nb=page ; nb<(page + 8); nb++)
+						{
+							$("#rot" + type + nb ).show();
+						}
+					break;
+					
+					case "fadpage":
+						var type="circuits";
+						var page=( parseInt(parsedMsg[2]) * 8 ) - 8 + 1;
+						console.log("fadpage ::: " + msg);
+						if( parsedMsg[1] == "mem")
+						{
+							type="mémoires";
+						}
+						$(".class_page_fad").hide();
+						
+						for(var nb=page ; nb<(page + 8); nb++)
+						{
+							$("#fad" + type + nb ).show();
+						}
+					break;
+					
+					case "master":
+						var val=parseInt(parsedMsg[1]);
+						$("#handle_master_mémoires1" ).slider("value" , val);
+						
+					break;
+					
+					case "chs_ls":
+						var num=parseInt(parsedMsg[1]);
+						$( "#val_subchasers" + num ).html(parseInt(parsedMsg[2]));
+					break;
+					
+					default:
+						console.log( "WS read error :>" + msg);
+				}
+			}
+			
+			
+		}
+
+		  
+	</script>
+</head>
+
+<body>
+	<!--
+<table id="links" style="background-color: #999999; border-radius: 5px; margin:5px;">
+	<tr >
+		<td class="linkBox"><a href="index.html">Index</a></td>
+		<td class="linkBox"><a href="mic1.html">Mic-DSP</a></td>
+		<td class="linkBox"><a href="mic2.html">Mic-Set</a></td>
+		<td class="linkBox"><a href="duck.html"> Duck </a></td>
+		<td class="linkBox"><a href="prom.html">Wagons</a></td>
+		<td class="linkBox"><a href="mix.html">Mix-Ext</a></td>
+	</tr>
+</table> 
+<hr>
+
+ -->
+
+<!--
+<fieldset id="fieldAct" class=" ui-state-default ui-corner-all ui-helper-clearfix">
+<legend></legend>
+	<label for="CONNECT">Connexion</label>
+	<input type="radio" name="TxRxWS" id="CONNECT">
+	<label for="TX">Envoyer</label>
+	<input type="radio" name="TxRxWS" id="TX">
+	<label for="RX">Recevoir</label>
+	<input type="radio" name="TxRxWS" id="RX">
+</fieldset>
+-->
+<pre id="Rxlog" class="class_log ui-state-error " >INFO\> local interface: loading ...</pre>
+<pre id="Txlog" class="ui-state-error class_log"></pre>
+
+
+<div class="newfaders">circuits,1,48,c</div>
+<div class="newfaders">circuits,49,96,c</div>
+
+<div class="newfaders">mémoires,1,24,m</div>
+<div class="newfaders">chasers,1,8,cl</div>
+
+<script>
+	$( document ).ready(function() {
+		console.log( "Interface ready!" );
+    	document.getElementById('Txlog').textContent ="INFO> local interface: ready";
+    	//$(  "#clrAllCir" ).mousedown();
+    	setTimeout(function() { 
+			$("#handle_master_mémoires1" ).slider('value', 255);
+			updateCircuitsByMem( actual_slider_value_memoires );
+			$("#test" ).append().css('backgroundColor', "blue");
+			loadMEM();
+			//sendByWs( "shw_dmx" );
+			logRX("fadpage,mem,1");
+			logRX("rotpage,cir,1");
+			document.getElementById('Txlog').textContent ="INFO> table init: done";
+		}, 1000);
+    	
+	});
+</script>
+</body>
+</html>
