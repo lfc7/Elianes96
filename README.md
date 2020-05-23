@@ -10,4 +10,4 @@ runWS.sh dependency: buffer ( sudo apt install buffer )
 run "runWS.sh" to start link between websocketd and serial "/dev/ttyACM0"
 then open or refresh elianes96.html in your browser it should connect to websocket.
 
-![image description](img/Screenshot_2020-05-23 DMX 96 24.png)
+![image description](img/Screenshot_2020-05-23_Elianes96.jpg)
